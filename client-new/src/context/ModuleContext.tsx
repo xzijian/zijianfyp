@@ -1,11 +1,6 @@
 import { createContext, useReducer } from "react";
 
-interface IContextProps {
-  state: any;
-  dispatch: ({ type }: { type: string }) => void;
-}
-
-export const ModulesContext = createContext({} as IContextProps);
+export const ModulesContext = createContext({} as any);
 
 export const modulesReducer = (state: any, action: any) => {
   switch (action.type) {

@@ -7,13 +7,17 @@ export default function Navbar({
 }: React.HTMLAttributes<HTMLElement>) {
   return (
     <div className="border-b px-2">
-      <div className="flex h-16 items-center px-4">
-        <h1 className=" font-extrabold text-3xl text-primary align-top">
-          StudentGo
-        </h1>
-        <NavLinks className="mx-auto space-x-4 align-left" />
-        <div className="pl-24 flex items-center space-x-4">
+      <div className="flex h-16 items-center justify-between px-4">
+        <div className="w-[32px]">
+          <h1 className=" font-extrabold text-3xl text-primary align-top">
+            StudentGo
+          </h1>
+        </div>
+
+        <NavLinks />
+        <div className="space-x-4">
           {/* <Search /> */}
+          {/* If not logged in, display login button here */}
           <UserNav />
         </div>
       </div>

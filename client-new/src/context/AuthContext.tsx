@@ -1,13 +1,11 @@
 import { createContext, useReducer, useEffect } from "react";
 
-interface IContextProps {
-  state: any;
-  dispatch: ({ type }: { type: string }) => void;
-}
+export const AuthContext = createContext({} as any);
 
-export const AuthContext = createContext({} as IContextProps);
-
-export const authReducer = (state: any, action: any) => {
+export const authReducer = (
+  state: any,
+  action: { type: string; payload: object }
+) => {
   switch (action.type) {
     case "LOGIN":
       return { user: action.payload };
