@@ -1,5 +1,9 @@
+import LoginDialog from "./LoginComponent";
 import { UserNav } from "./UserNav";
-import { NavLinks } from "./navlinks";
+import { NavLinks } from "./NavLinks";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import AuthenticationPage from "@/app/login/page";
 
 export default function Navbar({
   className,
@@ -19,6 +23,7 @@ export default function Navbar({
           {/* <Search /> */}
           {/* If not logged in, display login button here */}
           <UserNav />
+          <LoginDialog />
         </div>
       </div>
     </div>
