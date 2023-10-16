@@ -1,12 +1,17 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import LoginDialog from "../LoginComponent";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 const image = "/heroImg.png";
 
 export default function HeroHeader() {
+  const { user } = useAuthContext();
+
   return (
     <section className="container flex flex-col gap-4 pb-12 pt-4 text-center lg:items-center lg:gap-8 lg:py-20">
       <div className="flex flex-1 flex-col items-center gap-4 text-center lg:gap-8">
@@ -19,17 +24,42 @@ export default function HeroHeader() {
           </h2>
         </div>
         <div className=" space-x-8">
-          <LoginDialog buttonClassName="w-[10rem]" />
+          {user ? (
+            <>
+              <Link
+                href="/modules"
+                target="_blank"
+                className={`w-[10rem] ${cn(
+                  buttonVariants({ size: "lg", variant: "default" })
+                )}`}
+              >
+                Modules
+              </Link>
+              <Link
+                href="/groups"
+                target="_blank"
+                className={`w-[10rem] ${cn(
+                  buttonVariants({ size: "lg", variant: "outline" })
+                )}`}
+              >
+                Groups
+              </Link>
+            </>
+          ) : (
+            <>
+              <LoginDialog buttonClassName="w-[10rem]" />
 
-          <Link
-            href="/signUp"
-            target="_blank"
-            className={`w-[10rem] ${cn(
-              buttonVariants({ size: "lg", variant: "outline" })
-            )}`}
-          >
-            Sign Up
-          </Link>
+              <Link
+                href="/signUp"
+                target="_blank"
+                className={`w-[10rem] ${cn(
+                  buttonVariants({ size: "lg", variant: "outline" })
+                )}`}
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </div>
       {image !== null ? (
