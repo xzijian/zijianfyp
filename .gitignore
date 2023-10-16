@@ -1,9 +1,8 @@
-/server/node_modules
-\server\node_modules
-/client/node_modules
-\client\node_modules
-
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Ignore node_modules in server and client directories
+server/node_modules
+server\node_modules
+client/node_modules
+client\node_modules
 
 # dependencies
 /client-new/node_modules
