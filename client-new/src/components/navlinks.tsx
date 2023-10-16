@@ -12,28 +12,22 @@ export function NavLinks({
       {...props}
     >
       <Link
-        href="/examples/dashboard"
+        href="/"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
-        Overview
+        Home
+      </Link>
+      <Link
+        href="/modules"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Modules
       </Link>
       <Link
         href="/examples/dashboard"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Customers
-      </Link>
-      <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Products
-      </Link>
-      <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Settings
+        Groups
       </Link>
     </nav>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useReducer } from "react";
 
 export const ModulesContext = createContext({} as any);
