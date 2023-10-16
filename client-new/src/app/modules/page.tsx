@@ -50,7 +50,7 @@ export default async function TaskPage() {
           <div>
             <h2 className="text-2xl font-bold tracking-tight">My Modules</h2>
             <p className="text-muted-foreground">
-              Here&apos;s a list of modules!
+              Here&apos;s your list of modules!
             </p>
           </div>
         </div>
