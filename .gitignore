@@ -1,2 +1,38 @@
 /server/node_modules
 /client/node_modules
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/client-new/node_modules
+/client-new/.pnp
+/client-new/.pnp.js
+
+# testing
+/client-new/coverage
+
+# next.js
+/client-new/.next/
+/client-new/out/
+
+# production
+/client-new/build
+
+# misc
+/client-new/.DS_Store
+/client-new/*.pem
+
+# debug
+/client-new/npm-debug.log*
+/client-new/yarn-debug.log*
+/client-new/yarn-error.log*
+
+# local env files
+/client-new/.env*.local
+
+# vercel
+/client-new/.vercel
+
+# typescript
+/client-new/*.tsbuildinfo
+/client-new/next-env.d.ts
