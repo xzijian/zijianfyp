@@ -1,50 +1,36 @@
-import { promises as fs } from "fs";
-import path from "path";
-import { Metadata } from "next";
-import Image from "next/image";
-import { z } from "zod";
+"use client";
 
-import { columns } from "@/components/ModulesPage/Columns";
-import { DataTable } from "@/components/ModulesPage/DataTable";
-import { taskSchema } from "@/components/ModulesPage/schema";
+import { useEffect } from "react";
+import { useModulesContext } from "@/hooks/useModulesContext";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { ModuleTable } from "@/components/ModulesPage/ModuleTable";
 
-export const metadata: Metadata = {
-  title: "Tasks",
-  description: "A task and issue tracker build using Tanstack Table.",
-};
+export default function TaskPage() {
+  const { modules, dispatch } = useModulesContext();
+  const { user } = useAuthContext();
 
-// Simulate a database read for tasks.
-async function getTasks() {
-  const data = await fs.readFile(
-    path.join(process.cwd(), "src/components/ModulesPage/tempTasks.json")
-  );
+  // const tasks = await getTasks();
+  useEffect(() => {
+    const fetchModules = async () => {
+      const response = await fetch("http://localhost:3001/api/modules", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      const json = await response.json();
 
-  const tasks = JSON.parse(data.toString());
+      if (response.ok) {
+        dispatch({ type: "SET_MODULE", payload: json });
+      }
+    };
 
-  return z.array(taskSchema).parse(tasks);
-}
+    if (user) {
+      fetchModules();
+    }
+  }, [dispatch, user]);
 
-export default async function TaskPage() {
-  const tasks = await getTasks();
+  console.log(modules);
 
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/tasks-light.png"
-          width={1280}
-          height={998}
-          alt="Playground"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/tasks-dark.png"
-          width={1280}
-          height={998}
-          alt="Playground"
-          className="hidden dark:block"
-        />
-      </div>
       <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
         <div className="flex items-center justify-between space-y-2">
           <div>
@@ -54,7 +40,7 @@ export default async function TaskPage() {
             </p>
           </div>
         </div>
-        <DataTable data={tasks} columns={columns} />
+        <ModuleTable />
       </div>
     </>
   );
