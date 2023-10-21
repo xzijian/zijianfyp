@@ -24,7 +24,7 @@ export function NavLinks({
         Modules
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/groups"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Groups
