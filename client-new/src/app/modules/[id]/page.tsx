@@ -1,8 +1,10 @@
+import AddModulePostDialog from "@/components/ModulesPage/AddModulePostDialog";
 import { ModulePostCard } from "@/components/ModulesPage/ModulePostCard";
 import { StudentsCard } from "@/components/ModulesPage/StudentsCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 export default function ModuleDetailsPage({
   params,
@@ -23,11 +25,14 @@ export default function ModuleDetailsPage({
       </div>
       <Separator className="my-6" />
       <div className="flex flex-row justify-between space-x-12">
-        <Input
-          className="max-w-5xl flex-1"
-          placeholder="Search Posts..."
-        ></Input>
-        <Button className=" w-80">Create New Post</Button>
+        <div className="flex flex-row space-x-10 w-full">
+          <Input className="flex-1" placeholder="Search Posts..." />
+          <Button variant="outline">
+            <CrossCircledIcon className="w-6 h-6 pr-2" />
+            Clear Filters
+          </Button>
+        </div>
+        <AddModulePostDialog />
       </div>
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 justify-between">
         <div className="flex-1 lg:max-w-5xl space-y-6">

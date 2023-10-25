@@ -8,8 +8,9 @@ import { IconSpinner } from "../ui/icons";
 import { useModulesContext } from "@/hooks/useModulesContext";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useState } from "react";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
-export default function AddModulesForm() {
+export default function AddModulePostDialog() {
   const { dispatch, isLoading } = useModulesContext();
   const { user } = useAuthContext();
 
@@ -55,35 +56,44 @@ export default function AddModulesForm() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">Add a module</h3>
-        <p className="text-sm text-muted-foreground">
-          Add a module here to subscribe to it!
-        </p>
-      </div>
-      <Separator />
-      <form onSubmit={handleSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="moduleName">
-              Module Name
-            </Label>
-            <Input
-              id="moduleName"
-              placeholder="Enter your Module Name..."
-              type="text"
-              autoCapitalize="uppercase"
-              autoCorrect="off"
-              disabled={isLoading}
-            />
+    <Dialog>
+      <DialogTrigger>
+        <Button className=" w-80">Create New Post</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-medium">Create post</h3>
+            <p className="text-sm text-muted-foreground">
+              Add a post in this module!
+            </p>
           </div>
-          <Button disabled={isLoading}>
-            {isLoading && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
-            Submit
-          </Button>
+          <Separator />
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-6">
+              <div className="grid gap-1">
+                <Label className="sr-only" htmlFor="postTitle">
+                  Post Title
+                </Label>
+                <Input
+                  id="moduleName"
+                  placeholder="Enter the title of your post..."
+                  type="text"
+                  autoCapitalize="uppercase"
+                  autoCorrect="off"
+                  disabled={isLoading}
+                />
+              </div>
+              <Button disabled={isLoading}>
+                {isLoading && (
+                  <IconSpinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Submit
+              </Button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

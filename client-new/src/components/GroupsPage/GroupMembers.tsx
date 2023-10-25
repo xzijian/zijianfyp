@@ -1,5 +1,6 @@
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+"use client";
 
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +25,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { IconMemberChat } from "../ui/icons";
+import { useState } from "react";
+import { Input } from "../ui/input";
 
 export function GroupMembersCard() {
+  const [isAddingMember, setIsAddingMember] = useState(false);
+  const [newMember, setNewMember] = useState("");
+  const handleAddMember = () => {
+    setIsAddingMember(true);
+  };
   return (
     <Card>
       <CardHeader>
@@ -73,12 +81,25 @@ export function GroupMembersCard() {
         </div>
       </CardContent>
       <CardFooter>
-        <Button
-          variant="outline"
-          className="w-full hover:text-white hover:bg-primary hover:border-white"
-        >
-          Add Member
-        </Button>
+        {isAddingMember ? (
+          <div className="flex items-center space-x-4">
+            <Input
+              type="text"
+              placeholder="Enter new member's name"
+              value={newMember}
+              onChange={(e) => setNewMember(e.target.value)}
+            />
+            <Button>Submit</Button>
+          </div>
+        ) : (
+          <Button
+            variant="outline"
+            className="w-full hover:text-white hover:bg-primary hover:border-white"
+            onClick={handleAddMember}
+          >
+            Add Member
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

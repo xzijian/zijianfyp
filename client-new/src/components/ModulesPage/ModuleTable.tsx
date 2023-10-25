@@ -44,6 +44,9 @@ import {
 } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import AddModulesForm from "./AddModuleForm";
+import Link from "next/link";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 
 const data: Payment[] = [
   {
@@ -146,6 +149,7 @@ export const columns: ColumnDef<Payment>[] = [
 ];
 
 export function ModuleTable() {
+  const { push } = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -173,7 +177,9 @@ export function ModuleTable() {
     },
   });
   const totalRowCount = table.getFilteredRowModel().rows.length;
-
+  function linkToPage() {
+    push("/modules/abc");
+  }
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -223,6 +229,8 @@ export function ModuleTable() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  onClick={linkToPage}
+                  className=" transition-all ease-in hover:cursor-pointer"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

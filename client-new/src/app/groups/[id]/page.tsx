@@ -46,10 +46,10 @@ export default function GroupDetailPage() {
         </div>
       </div>
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 justify-between">
-        <aside className="w-80">
+        <aside className="w-[22rem]">
           <GroupMembersCard />
         </aside>
-        <div className="flex-1 lg:max-w-5xl space-y-6">
+        <div className="flex-1 lg:max-w-4xl space-y-6">
           {messageLog.map((message, index) => (
             <div key={index}>
               <ChatHistory message={message} />
