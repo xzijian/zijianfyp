@@ -28,7 +28,6 @@ export default function HeroHeader() {
             <>
               <Link
                 href="/modules"
-                target="_blank"
                 className={`w-[10rem] ${cn(
                   buttonVariants({ size: "lg", variant: "default" })
                 )}`}
@@ -37,7 +36,6 @@ export default function HeroHeader() {
               </Link>
               <Link
                 href="/groups"
-                target="_blank"
                 className={`w-[10rem] ${cn(
                   buttonVariants({ size: "lg", variant: "outline" })
                 )}`}

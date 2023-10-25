@@ -3,11 +3,12 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/ui/icons";
+import { IconSpinner, IconSun } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLogin } from "@/hooks/useLogin";
+import { FaceIcon } from "@radix-ui/react-icons";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -62,9 +63,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
             />
           </div>
           <Button disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
+            {isLoading && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
             Sign In
           </Button>
         </div>
@@ -81,9 +80,9 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
       </div>
       <Button variant="outline" type="button" disabled={isLoading}>
         {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          <IconSpinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
+          <FaceIcon className="mr-2 h-4 w-4" />
         )}{" "}
         Sign Up
       </Button>

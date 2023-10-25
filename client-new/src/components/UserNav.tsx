@@ -14,13 +14,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useLogout } from "@/hooks/useLogout";
+import { useRouter } from "next/navigation";
 
 export function UserNav() {
   const { user } = useAuthContext();
+  const { push } = useRouter();
   const { logout } = useLogout();
 
   const handleLogOut = () => {
     logout();
+  };
+
+  const handleProfile = () => {
+    push("/profile");
   };
 
   return (
@@ -44,7 +50,7 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleProfile}>
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
