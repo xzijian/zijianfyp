@@ -4,12 +4,13 @@ import { useEffect } from "react";
 import { useModulesContext } from "@/hooks/useModulesContext";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { ModuleTable } from "@/components/ModulesPage/ModuleTable";
+import { useRouter } from "next/navigation";
 
-export default function TaskPage() {
+export default function ModulesPage() {
   const { modules, dispatch } = useModulesContext();
   const { user } = useAuthContext();
+  const { push } = useRouter();
 
-  // const tasks = await getTasks();
   useEffect(() => {
     const fetchModules = async () => {
       const response = await fetch("http://localhost:3001/api/modules", {
@@ -24,6 +25,8 @@ export default function TaskPage() {
 
     if (user) {
       fetchModules();
+    } else {
+      push("/");
     }
   }, [dispatch, user]);
 
@@ -40,7 +43,7 @@ export default function TaskPage() {
             </p>
           </div>
         </div>
-        <ModuleTable />
+        {modules && <ModuleTable data={modules} />}
       </div>
     </>
   );
