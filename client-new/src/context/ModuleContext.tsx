@@ -9,6 +9,7 @@ export declare interface ModulesContextInterface {
   students: any;
   comments: any;
   dispatch: any;
+  isLoading: any;
 }
 
 export const ModulesContext = createContext<

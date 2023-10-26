@@ -14,6 +14,12 @@ import { useModulesContext } from "@/hooks/useModulesContext";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 
+export declare interface ModuleInterface {
+  _id: string;
+  name: string;
+  students: string[];
+}
+
 export default function ModuleDetailsPage({
   params,
 }: {
@@ -22,6 +28,7 @@ export default function ModuleDetailsPage({
   const { user } = useAuthContext();
   const { posts, students, dispatch } = useModulesContext();
 
+  const [currentModule, setCurrentModule] = useState<ModuleInterface>();
   const [fetchFlag, setFetchFlag] = useState(false);
 
   const fetchPosts = async () => {
@@ -42,6 +49,7 @@ export default function ModuleDetailsPage({
 
     if (response.ok && response1.ok) {
       const json2 = [postDataJson, moduleDataJson];
+      setCurrentModule(moduleDataJson);
       dispatch({ type: "SET_POSTS", payload: json2 });
     }
   };
@@ -56,7 +64,7 @@ export default function ModuleDetailsPage({
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
-            Module Name here
+            {currentModule?.name}
           </h2>
           <p className="text-muted-foreground">
             Whats going on in this module?

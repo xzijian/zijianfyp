@@ -34,6 +34,9 @@ import { Input } from "../ui/input";
 import { IconMessage } from "../ui/icons";
 import AddCommentForm from "./AddPostCommentForm";
 import { ScrollArea } from "../ui/scroll-area";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { useParams } from "next/navigation";
+import { useModulesContext } from "@/hooks/useModulesContext";
 
 export declare interface PostComment {
   _id: string;
@@ -60,6 +63,32 @@ export function ModulePostCard({
   modulePostData,
   updateFlag,
 }: ModulePostCardProp) {
+  const { user } = useAuthContext();
+  const { dispatch } = useModulesContext();
+  const params = useParams();
+
+  const handleDelete = async () => {
+    if (!user) {
+      return;
+    }
+    const response = await fetch(
+      "http://localhost:3001/api/module/" +
+        params.id +
+        "/" +
+        modulePostData._id,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
+    const json = await response.json();
+    if (response.ok) {
+      dispatch({ type: "DELETE_POST", payload: json });
+    }
+  };
+
   return (
     <Card>
       <CardHeader className="grid grid-cols-[1fr_110px] items-start gap-4 space-y-0">
@@ -71,7 +100,11 @@ export function ModulePostCard({
             <span className=" italic">{modulePostData.authoremail}</span>)
           </CardDescription>
         </div>
-        <Button variant="secondary" className="px-3 shadow-none">
+        <Button
+          variant="secondary"
+          className="px-3 shadow-none"
+          onClick={handleDelete}
+        >
           <TrashIcon className="mr-2 h-4 w-4" />
           Delete
         </Button>
