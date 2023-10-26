@@ -1,8 +1,19 @@
 "use client";
 
+import { ModulePost } from "@/components/ModulesPage/ModulePostCard";
 import { createContext, useReducer } from "react";
 
-export const ModulesContext = createContext({} as any);
+export declare interface ModulesContextInterface {
+  posts: ModulePost[];
+  modules: any;
+  students: any;
+  comments: any;
+  dispatch: any;
+}
+
+export const ModulesContext = createContext<
+  ModulesContextInterface | undefined
+>(undefined);
 
 export const modulesReducer = (state: any, action: any) => {
   switch (action.type) {
