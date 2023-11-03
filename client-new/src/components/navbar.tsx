@@ -13,7 +13,6 @@ export default function Navbar({
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   const { user } = useAuthContext();
-  console.log(user);
   return (
     <div className="border-b px-2">
       <div className="flex h-16 items-center justify-between px-4">

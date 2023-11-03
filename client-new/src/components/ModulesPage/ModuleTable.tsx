@@ -3,9 +3,8 @@
 import * as React from "react";
 import {
   CaretSortIcon,
-  ChevronDownIcon,
+  Cross1Icon,
   CrossCircledIcon,
-  DotsHorizontalIcon,
   EyeOpenIcon,
   PlusCircledIcon,
 } from "@radix-ui/react-icons";
@@ -21,18 +20,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -44,53 +32,24 @@ import {
 } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import AddModulesForm from "./AddModuleForm";
-import Link from "next/link";
-import { redirect } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
+import { IconClose } from "../ui/icons";
+import { ModuleActionButtons } from "./ModuleColumnActions";
+import AddModulesDialog from "./AddModuleForm";
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "CZ4031",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "CC0007",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "CZ4041",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "CZ4045",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "CZ4070",
-  },
-];
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+export type Module = {
+  _id: string;
+  name: string;
+  students: string[];
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export declare interface ModuleTableProps {
+  data: Module[];
+}
+
+export const columns: ColumnDef<Module>[] = [
   {
-    accessorKey: "email",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
@@ -103,53 +62,21 @@ export const columns: ColumnDef<Payment>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className=" font-medium uppercase pl-4">{row.getValue("email")}</div>
+      <div className=" font-medium uppercase pl-4">{row.getValue("name")}</div>
     ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <div className=" pr-4 float-right space-x-4">
-          <Button variant="outline">
-            <EyeOpenIcon className="mr-2 h-4 w-4" />
-            View
-          </Button>
-          <Button variant="destructive">
-            <CrossCircledIcon className="mr-2 w-4 h-4" />
-            Delete
-          </Button>
-        </div>
-
-        // <DropdownMenu>
-        //   <DropdownMenuTrigger asChild>
-        //     <Button variant="ghost" className="h-8 w-8 p-">
-        //       <span className="sr-only">Open menu</span>
-        //       <DotsHorizontalIcon className="h-4 w-4" />
-        //     </Button>
-        //   </DropdownMenuTrigger>
-        //   <DropdownMenuContent align="end">
-        //     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        //     <DropdownMenuItem
-        //       onClick={() => navigator.clipboard.writeText(payment.id)}
-        //     >
-        //       Copy payment ID
-        //     </DropdownMenuItem>
-        //     <DropdownMenuSeparator />
-        //     <DropdownMenuItem>View customer</DropdownMenuItem>
-        //     <DropdownMenuItem>View payment details</DropdownMenuItem>
-        //   </DropdownMenuContent>
-        // </DropdownMenu>
-      );
+      const clickedModule = row.original;
+      return <ModuleActionButtons clickedModule={clickedModule} />;
     },
   },
 ];
 
-export function ModuleTable() {
-  const { push } = useRouter();
+export function ModuleTable({ data }: ModuleTableProps) {
+  const [addModuleOpened, setAddModuleOpened] = React.useState(false);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -177,32 +104,40 @@ export function ModuleTable() {
     },
   });
   const totalRowCount = table.getFilteredRowModel().rows.length;
-  function linkToPage() {
-    push("/modules/abc");
-  }
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter modules..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Search modules..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
+        {(table.getColumn("name")?.getFilterValue() as string) && (
+          <Button
+            variant="outline"
+            className="mx-2"
+            onClick={() => table.getColumn("name")?.setFilterValue("")}
+          >
+            <IconClose className="h-3 w-3" />
+          </Button>
+        )}
         <div className="ml-auto">
-          <Dialog>
-            <DialogTrigger>
+          {/* <Dialog open={addModuleOpened}>
+            <DialogTrigger onClick={() => setAddModuleOpened(true)}>
               <Button>
                 <PlusCircledIcon className="mr-2 h-4 w-4" />
                 Add Module
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <AddModulesForm />
+              <AddModulesForm dialogTrigger={setAddModuleOpened} />
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
+          <AddModulesDialog />
         </div>
       </div>
       <div className="rounded-md border">
@@ -229,8 +164,7 @@ export function ModuleTable() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  onClick={linkToPage}
-                  className=" transition-all ease-in hover:cursor-pointer"
+                  className=" transition-all ease-in"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
