@@ -30,7 +30,11 @@ const addCommentSchema = z.object({
 });
 type AddCommentValues = z.infer<typeof addCommentSchema>;
 
-export default function AddModulePostDialog() {
+declare interface AddPostFormProps {
+  updateFlag: any;
+}
+
+export default function AddModulePostDialog({ updateFlag }: AddPostFormProps) {
   const { dispatch, isLoading } = useModulesContext();
   const { user } = useAuthContext();
   const params = useParams();
@@ -65,7 +69,9 @@ export default function AddModulePostDialog() {
 
     if (response.ok) {
       setDialogOpened(false);
+      form.resetField("post");
       dispatch({ type: "ADD_POST", payload: res });
+      updateFlag(true);
     } else {
       setError(res.error);
       //setEmptyFields(json.emptyFields)

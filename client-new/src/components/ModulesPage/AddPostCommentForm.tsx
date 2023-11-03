@@ -20,8 +20,8 @@ import { useParams } from "next/navigation";
 import { useModulesContext } from "@/hooks/useModulesContext";
 
 const addCommentSchema = z.object({
-  commentBody: z.string({
-    required_error: "Please enter your comment.",
+  commentBody: z.string().min(1, {
+    message: "Please enter your comment.",
   }),
 });
 
@@ -68,6 +68,7 @@ export default function AddCommentForm({
     if (response.ok) {
       updateFlag(true);
       dispatch({ type: "ADD_COMMENT", payload: json });
+      form.reset({ commentBody: "" });
     } else {
     }
     console.log(json);

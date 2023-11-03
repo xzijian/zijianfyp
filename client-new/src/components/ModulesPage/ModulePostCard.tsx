@@ -9,7 +9,6 @@ import {
   TimerIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,19 +18,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Input } from "../ui/input";
-import { IconMessage } from "../ui/icons";
 import AddCommentForm from "./AddPostCommentForm";
 import { ScrollArea } from "../ui/scroll-area";
 import { useAuthContext } from "@/hooks/useAuthContext";
@@ -85,6 +73,7 @@ export function ModulePostCard({
     );
     const json = await response.json();
     if (response.ok) {
+      updateFlag(true);
       dispatch({ type: "DELETE_POST", payload: json });
     }
   };
@@ -100,14 +89,16 @@ export function ModulePostCard({
             <span className=" italic">{modulePostData.authoremail}</span>)
           </CardDescription>
         </div>
-        <Button
-          variant="secondary"
-          className="px-3 shadow-none"
-          onClick={handleDelete}
-        >
-          <TrashIcon className="mr-2 h-4 w-4" />
-          Delete
-        </Button>
+        {user.email == modulePostData.authoremail && (
+          <Button
+            variant="secondary"
+            className="px-3 shadow-none"
+            onClick={handleDelete}
+          >
+            <TrashIcon className="mr-2 h-4 w-4" />
+            Delete
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex space-x-4 text-sm text-muted-foreground">
@@ -157,10 +148,6 @@ export function ModulePostCard({
           )}
         </ScrollArea>
       </CardFooter>
-      {/* <div className="flex flex-row px-6 pb-4 space-x-4">
-        <Input placeholder="Enter your comment..."></Input>
-        <Button>Post</Button>
-      </div> */}
       <AddCommentForm modulePostInfo={modulePostData} updateFlag={updateFlag} />
     </Card>
   );
