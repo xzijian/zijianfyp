@@ -23,6 +23,7 @@ import {
 } from "../ui/form";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useProfile } from "@/hooks/useProfile";
+import { useGroupsContext } from "@/hooks/useGroupsContext";
 
 const profileFormSchema = z.object({
   groupName: z
@@ -42,10 +43,12 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function AddGroupForm() {
+  const { dispatch, isLoading } = useGroupsContext();
   const { user } = useAuthContext();
-  const { updateProfile, error, isLoading } = useProfile();
 
   const defaultValues: Partial<ProfileFormValues> = {
+    groupName: "",
+    moduleName: "",
     members: [{ value: user.email }],
   };
 
@@ -59,10 +62,38 @@ export function AddGroupForm() {
     name: "members",
     control: form.control,
   });
+
+  const createGroup = async (groupname: string, coursename: string) => {
+    if (!user) {
+      return;
+    }
+    const email = user.email;
+    const group = { groupname, coursename, email };
+    const response = await fetch("http://localhost:3001/api/groups", {
+      method: "POST",
+      body: JSON.stringify(group),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+    const json = await response.json();
+
+    if (!response.ok) {
+      //setEmptyFields(json.emptyFields)
+    }
+    if (response.ok) {
+      //setEmptyFields([])
+      dispatch({ type: "CREATE_GROUP", payload: json });
+    }
+  };
+
   async function onSubmit(event: ProfileFormValues) {
     console.log(event);
     // await updateProfile(user.email, event.name, event.course, event.year);
+    await createGroup(event.groupName, event.moduleName);
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

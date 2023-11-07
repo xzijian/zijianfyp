@@ -18,7 +18,7 @@ export default function LoginDialog({
 }: LoginDialogProps) {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button
           className={cn(
             buttonVariants({ variant: "default", size: "lg" }),
