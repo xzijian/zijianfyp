@@ -48,8 +48,7 @@ export default function HeroHeader() {
               <LoginDialog buttonClassName="w-[10rem]" />
 
               <Link
-                href="/signUp"
-                target="_blank"
+                href="/register"
                 className={`w-[10rem] ${cn(
                   buttonVariants({ size: "lg", variant: "outline" })
                 )}`}

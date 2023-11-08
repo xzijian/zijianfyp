@@ -2,7 +2,21 @@
 
 import { createContext, useReducer, useEffect } from "react";
 
-export const AuthContext = createContext({} as any);
+export declare interface UserInterface {
+  course: string;
+  email: string;
+  names: string;
+  token: string;
+  year: string;
+}
+
+export declare interface AuthContextInterface {
+  user: UserInterface;
+}
+
+export const AuthContext = createContext<AuthContextInterface | undefined>(
+  undefined
+);
 
 export const authReducer = (
   state: any,

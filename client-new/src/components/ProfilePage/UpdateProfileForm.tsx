@@ -11,7 +11,7 @@ import { useModulesContext } from "@/hooks/useModulesContext";
 import { useState } from "react";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { Label } from "../ui/label";
-import { Icons } from "../ui/icons";
+import { IconSpinner } from "../ui/icons";
 import {
   Form,
   FormControl,
@@ -140,7 +140,7 @@ export function ProfileForm() {
           )}
         />
         <Button type="submit">
-          {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+          {isLoading && <IconSpinner className="mr-2 h-4 w-4 animate-spin" />}
           Update Profile
         </Button>
       </form>

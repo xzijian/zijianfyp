@@ -1,13 +1,31 @@
 "use client";
 
+import { GroupDetail } from "@/app/groups/[id]/page";
+import { Message } from "@/components/GroupsPage/ChatHistory";
 import { createContext, useReducer } from "react";
+
+declare interface State {
+  groups: [];
+  members: [];
+  messages: [];
+}
 
 interface IContextProps {
   state: any;
   dispatch: ({ type }: { type: string }) => void;
 }
 
-export const GroupsContext = createContext({} as IContextProps);
+export declare interface GroupsContextInterface {
+  posts: GroupDetail[];
+  groups: GroupDetail[];
+  messages: Message[];
+  dispatch: any;
+  isLoading: any;
+}
+
+export const GroupsContext = createContext<GroupsContextInterface | undefined>(
+  undefined
+);
 
 export const groupsReducer = (state: any, action: any) => {
   switch (action.type) {

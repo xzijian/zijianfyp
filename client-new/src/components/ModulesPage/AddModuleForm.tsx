@@ -63,8 +63,13 @@ export default function AddModulesDialog() {
   const [dialogOpened, setDialogOpened] = useState(false);
   const [error, setError] = useState("");
 
+  const defaultValues: Partial<AddModuleFormValues> = {
+    module: "",
+  };
   const form = useForm<AddModuleFormValues>({
     resolver: zodResolver(addModuleFormSchema),
+    defaultValues,
+    mode: "onChange",
   });
 
   async function sendRequest(name: string) {
@@ -113,7 +118,7 @@ export default function AddModulesDialog() {
 
   return (
     <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button>
           <PlusCircledIcon className="mr-2 h-4 w-4" />
           Add Module

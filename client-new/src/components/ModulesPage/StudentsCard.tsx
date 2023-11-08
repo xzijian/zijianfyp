@@ -21,7 +21,10 @@ export function StudentsCard({ students }: StudentsCardProps) {
       <CardContent className="grid gap-6">
         {students &&
           students.map((student) => (
-            <div className="flex items-center justify-between space-x-4">
+            <div
+              className="flex items-center justify-between space-x-4"
+              key={student}
+            >
               <div className="flex items-center space-x-4">
                 <Avatar>
                   <AvatarImage src="/avatars/01.png" />
