@@ -67,20 +67,16 @@ export default function GroupsPage() {
         </div>
       </div>
       <Separator className="my-6" />
-      <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+      <div className="flex flex-col justify-between lg:flex-row lg:space-y-8 flex-wrap w-full">
         {groups ? (
-          groups.map((group) => <GroupCard groupData={group} />)
+          groups.map((group) => (
+            <div key={group._id} className="flex ">
+              <GroupCard groupData={group} />
+            </div>
+          ))
         ) : (
           <p>No Groups here</p>
         )}
-        {/* <aside className=" w-1/2 space-y-8">
-          <GroupCard />
-          <GroupCard />
-        </aside>
-        <div className="w-1/2 space-y-8">
-          <GroupCard />
-          <GroupCard />
-        </div> */}
       </div>
     </div>
   );

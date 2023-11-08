@@ -14,23 +14,36 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { z } from "zod";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormField } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { useGroupsContext } from "@/hooks/useGroupsContext";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { Input } from "../ui/input";
 
 const addMessageSchema = z.object({
-  message: z.string().min(1, { message: "Please enter a message" }),
+  message: z.string(),
 });
 
 type AddMessasgeValues = z.infer<typeof addMessageSchema>;
 
-export function ChatForm({ input, setInput, isLoading }: any) {
-  //   const { formRef, onKeyDown } = useEnterSubmit();
-  const inputRef = React.useRef<HTMLTextAreaElement>(null);
-  const router = useRouter();
+declare type ChatFormProps = {
+  groupId: string;
+};
+export function ChatForm({ groupId }: ChatFormProps) {
+  const { user } = useAuthContext();
+  const { messages, dispatch, isLoading } = useGroupsContext();
 
   const defaultValues: Partial<AddMessasgeValues> = {
     message: "",
@@ -42,10 +55,38 @@ export function ChatForm({ input, setInput, isLoading }: any) {
     mode: "onChange",
   });
 
-  async function onSubmit(event: AddMessasgeValues) {
-    console.log(event);
+  async function onSubmit(data: AddMessasgeValues) {
+    console.log(groupId);
+    form.resetField("message");
     // await createGroup(event.groupName, event.moduleName);
+    await addMessage(data.message);
   }
+
+  const addMessage = async (message: string) => {
+    if (!user) {
+      return;
+    }
+    const message1 = { message };
+    const response = await fetch(
+      "http://localhost:3001/api/groups/messages/" + groupId,
+      {
+        method: "POST",
+        body: JSON.stringify(message1),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
+    const json = await response.json();
+
+    if (!response.ok) {
+      //setEmptyFields(json.emptyFields)
+    }
+    if (response.ok) {
+      dispatch({ type: "ADD_MESSAGE", payload: json });
+    }
+  };
 
   return (
     <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">
@@ -63,22 +104,25 @@ export function ChatForm({ input, setInput, isLoading }: any) {
             name="message"
             control={form.control}
             render={({ field }) => (
-              <Textarea
-                tabIndex={0}
-                //   onKeyDown={onKeyDown}
-                rows={1}
-                placeholder="Send a message."
-                spellCheck={false}
-                className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm"
-                {...field}
-              />
+              <FormItem>
+                <FormControl>
+                  <Textarea
+                    tabIndex={0}
+                    rows={1}
+                    placeholder="Send a message."
+                    className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
           />
           <div className="absolute right-0 top-4 sm:right-4">
             <Button
               type="submit"
               size="icon"
-              disabled={isLoading || input === ""}
+              disabled={isLoading || !form.getFieldState("message").isDirty}
             >
               <IconArrowElbow />
               <span className="sr-only">Send message</span>

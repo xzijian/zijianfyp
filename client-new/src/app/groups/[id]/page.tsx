@@ -3,12 +3,13 @@
 import ChatHistory, { Message } from "@/components/GroupsPage/ChatHistory";
 import { ChatForm } from "@/components/GroupsPage/ChatMessageArea";
 import { GroupMembersCard } from "@/components/GroupsPage/GroupMembers";
-import { IconMessage } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
+import { IconMessage, IconTrash } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useGroupsContext } from "@/hooks/useGroupsContext";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 
 const messageLog = [
@@ -63,7 +64,8 @@ export default function GroupDetailPage({
   params,
 }: GroupDetailPageProp) {
   const { user } = useAuthContext();
-  const { groups, messages, dispatch } = useGroupsContext();
+  const { messages, dispatch } = useGroupsContext();
+  const [groups, setGroups] = useState<GroupDetail[]>();
   const searchParams = useSearchParams();
   const groupName = searchParams.get("nm");
 
@@ -83,9 +85,21 @@ export default function GroupDetailPage({
     }
   };
 
+  const fetchGroups = async () => {
+    if (!user) return;
+    const response = await fetch("http://localhost:3001/api/groups", {
+      headers: { Authorization: `Bearer ${user.token}` },
+    });
+    const json = await response.json();
+
+    if (response.ok) {
+      setGroups(json);
+    }
+  };
+
   useEffect(() => {
     fetchMessages();
-    console.log(params.groupname);
+    fetchGroups();
   }, [dispatch, user]);
 
   return (
@@ -95,10 +109,17 @@ export default function GroupDetailPage({
           <h2 className="text-2xl font-bold tracking-tight">{groupName}</h2>
           <p className="text-muted-foreground">Whats going on in this group?</p>
         </div>
+        <Button variant="destructive">
+          <IconTrash className="mr-2" /> Delete Group
+        </Button>
       </div>
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 justify-between">
         <aside className="w-[22rem]">
-          <GroupMembersCard />
+          <GroupMembersCard
+            groupData={
+              groups && groups.find((group) => group._id === params.id)
+            }
+          />
         </aside>
         <div className="flex-1 lg:max-w-4xl">
           <div className="flex flex-col justify-between lg:max-h-[710px] min-h-[710px]  border border-muted shadow-md rounded-md p-4">
@@ -108,7 +129,7 @@ export default function GroupDetailPage({
                 className="h-[600px]"
               >
                 {messages && messages.length > 0 ? (
-                  messages.map((message, index) => (
+                  messages.toReversed().map((message, index) => (
                     <div key={index}>
                       <ChatHistory message={message} />
                       {index < messages.length - 1 && (
@@ -127,7 +148,7 @@ export default function GroupDetailPage({
               </ScrollToBottom>
             </div>
             <div>
-              <ChatForm />
+              <ChatForm groupId={params.id} />
             </div>
           </div>
         </div>

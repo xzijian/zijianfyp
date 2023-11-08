@@ -25,8 +25,6 @@ export default function ModulesPage() {
 
     if (user) {
       fetchModules();
-    } else {
-      push("/");
     }
   }, [dispatch, user]);
 

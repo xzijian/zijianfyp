@@ -9,11 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLogin } from "@/hooks/useLogin";
 import { FaceIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const { login, error, isLoading } = useLogin();
+  const { push } = useRouter();
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -29,6 +32,10 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     const password = passwordInput.value;
     await login(email, password);
   }
+
+  const handleRegister = () => {
+    push("/register");
+  };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -78,7 +85,13 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
+
+      <Button
+        variant="outline"
+        type="button"
+        disabled={isLoading}
+        onClick={handleRegister}
+      >
         {isLoading ? (
           <IconSpinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (

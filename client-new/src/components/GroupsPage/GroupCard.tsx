@@ -54,10 +54,12 @@ export function GroupCard({ groupData }: GroupCardProp) {
       <CardContent className="grid gap-6">
         {groupData.members &&
           groupData.members.map((member, index) => (
-            <div className="flex items-center justify-between space-x-4">
+            <div
+              className="flex items-center justify-between space-x-4"
+              key={index}
+            >
               <div className="flex items-center space-x-4">
                 <Avatar>
-                  <AvatarImage src="/avatars/01.png" />
                   <AvatarFallback>{member.slice(0, 7)}</AvatarFallback>
                 </Avatar>
                 <div>

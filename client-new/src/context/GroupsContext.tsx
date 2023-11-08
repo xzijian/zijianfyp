@@ -4,6 +4,12 @@ import { GroupDetail } from "@/app/groups/[id]/page";
 import { Message } from "@/components/GroupsPage/ChatHistory";
 import { createContext, useReducer } from "react";
 
+declare interface State {
+  groups: [];
+  members: [];
+  messages: [];
+}
+
 interface IContextProps {
   state: any;
   dispatch: ({ type }: { type: string }) => void;
